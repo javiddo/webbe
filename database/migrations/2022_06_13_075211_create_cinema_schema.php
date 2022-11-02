@@ -36,7 +36,73 @@ class CreateCinemaSchema extends Migration
      */
     public function up()
     {
-        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
+        Schema::create('customers', function (Blueprint $table) {
+            $table->id();
+            $table->string('fullname');
+            $table->timestamps();
+        });
+
+        Schema::create('movies', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->timestamps();
+        });
+
+        Schema::create('rooms', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->integer('max_seat_counts');
+            $table->timestamps();
+        });
+
+
+        Schema::create('movie_graphics', function (Blueprint $table) {
+            $table->id();
+            $table->integer('movie_id')->index();
+            $table->datetime('starts');
+            $table->datetime('ends');
+            $table->timestamps();
+        });
+
+        Schema::create('seat_types', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->integer('percentage_value');
+            $table->timestamps();
+        });
+
+        Schema::create('seats', function (Blueprint $table) {
+            $table->id();
+            $table->boolean('available'); //it will show if seat is available or not
+            $table->integer('room_id')->index();
+            $table->integer('seat_type_id')->index();
+            $table->timestamps();
+        });
+
+        Schema::create('tickets', function (Blueprint $table) {
+            $table->id();
+            $table->integer('customer_id')->index();
+            $table->integer('price');
+            $table->integer('seat_id')->index();
+            $table->integer('movie_graphic_id')->index();
+            $table->timestamps();
+        });
+
+//        Schema::table('movie_graphics', function (Blueprint $table) {
+//            $table->foreign('movie_id')->references('id')->on('movies')->onUpdate('RESTRICT')->onDelete('CASCADE');
+//        });
+//
+//        Schema::table('seats', function (Blueprint $table) {
+//            $table->foreign('room_id')->references('id')->on('rooms')->onUpdate('RESTRICT')->onDelete('CASCADE');
+//            $table->foreign('seat_type_id')->references('id')->on('seat_types')->onUpdate('RESTRICT')->onDelete('CASCADE');
+//        });
+//
+//        Schema::table('tickets', function (Blueprint $table) {
+//            $table->foreign('customer_id')->references('id')->on('customers')->onUpdate('RESTRICT')->onDelete('CASCADE');
+//            $table->foreign('seat_id')->references('id')->on('seats')->onUpdate('RESTRICT')->onDelete('CASCADE');
+//            $table->foreign('movie_graphic_id')->references('id')->on('movie_graphics')->onUpdate('RESTRICT')->onDelete('CASCADE');
+//        });
+//        throw new \Exception('implement in coding task 4, you can ignore this exception if you are just running the initial migrations.');
     }
 
     /**
@@ -46,5 +112,12 @@ class CreateCinemaSchema extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('customers');
+        Schema::dropIfExists('movies');
+        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('movie_graphics');
+        Schema::dropIfExists('seat_types');
+        Schema::dropIfExists('seats');
+        Schema::dropIfExists('tickets');
     }
 }
